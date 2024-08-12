@@ -2,19 +2,19 @@ import React, { useReducer } from 'react';
 import './signup.css'
 
 // Define the shape of a form field
-interface FormField {
-  name: string;
-  type: string;
-  value: string;
-  label: string;
-  required: boolean;
+type FormField ={
+  name: string
+  type: string
+  value: string
+  label: string
+  required: boolean
   placeholder:string
 }
 
 // Define the state shape
-interface FormState {
-  fields: FormField[];
-  errors: { [key: string]: string };
+type FormState = {
+  fields: FormField[]
+  errors: { [key: string]: string }
 }
 
 // Define action types
@@ -53,7 +53,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
         errors: { ...state.errors, [action.fieldName]: action.error },
       };
     case 'CLEAR_ERROR':
-      const { [action.fieldName]: _, ...restErrors } = state.errors;
+      const { [action.fieldName]:_, ...restErrors } = state.errors;
       return {
         ...state,
         errors: restErrors,
@@ -68,7 +68,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
   }
 };
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

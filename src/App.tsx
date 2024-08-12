@@ -1,7 +1,8 @@
 import React from 'react';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
-import { Login } from './Components/login';
+import { Login } from './Components/Login/login';
 import SignUpData from './Components/SignUp/SignUpData';
+import { Products } from './Components/Pages/products';
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Routes> 
     <Route path='/' element={<SignUpData/>}/>   
     <Route path='/login' element={ <Login/>}/>   
+    <Route path='/products' element={<Products/>}/>
     
      </Routes>
     </div>

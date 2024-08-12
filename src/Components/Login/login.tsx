@@ -1,5 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { Container, TextField, Typography, Button, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 type StateType = {
   username: string;
@@ -69,6 +71,9 @@ const reducer = (state: StateType, action: Action): StateType => {
 
 const Login = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+const navigate = useNavigate();
+
   useEffect(() => {
     if (state.username.trim() && state.password.trim()) {
       dispatch({ type: "setIsButtonDisabled", payload: false });
@@ -99,16 +104,20 @@ const Login = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (state.username === "abc@gmail.com" && state.password === "password") {
+    if (state.username === "vj@gmail.com" && state.password === "welcome@123") {
         dispatch({
           type: "loginSuccess",
           payload: "login Successfully",
         });
+        
+        alert('login successfully')
+        navigate('/products');
       } else {
         dispatch({
           type: "loginFailed",
           payload: "Incorrect Username or Password",
         });
+        alert('Incorrect Username or Password')
       }
     console.log("username:", state.username, "password:", state.password);
     dispatch({ type: "RESET" });
@@ -161,10 +170,10 @@ const Login = () => {
               variant="contained"
               color="primary"
               sx={{ mt: 3, mb: 2 }}
-            //   onClick={handleLogin}
+              // onClick={}
               disabled={state.isButtonDisabled}
             >
-              Sign In\            </Button>
+              Sign In         </Button>
           </Box>
         </Box>
       </Container>
