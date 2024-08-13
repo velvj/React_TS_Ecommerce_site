@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from "react";
 import { Container, TextField, Typography, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-
 type StateType = {
   username: string;
   password: string;
@@ -20,7 +19,7 @@ const initialState: StateType = {
 };
 
 type Action =
- { type: "setUsername"; payload: string }
+  | { type: "setUsername"; payload: string }
   | { type: "setPassword"; payload: string }
   | { type: "setIsButtonDisabled"; payload: boolean }
   | { type: "loginSuccess"; payload: string }
@@ -72,7 +71,7 @@ const reducer = (state: StateType, action: Action): StateType => {
 const Login = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (state.username.trim() && state.password.trim()) {
@@ -82,8 +81,7 @@ const navigate = useNavigate();
     }
   }, [state.username, state.password]);
 
-// 
-
+  //
 
   const handleUsernameChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -105,20 +103,20 @@ const navigate = useNavigate();
     event.preventDefault();
 
     if (state.username === "vj@gmail.com" && state.password === "welcome@123") {
-        dispatch({
-          type: "loginSuccess",
-          payload: "login Successfully",
-        });
-        
-        alert('login successfully')
-        navigate('/products');
-      } else {
-        dispatch({
-          type: "loginFailed",
-          payload: "Incorrect Username or Password",
-        });
-        alert('Incorrect Username or Password')
-      }
+      dispatch({
+        type: "loginSuccess",
+        payload: "login Successfully",
+      });
+
+      alert("login successfully");
+      navigate("/products");
+    } else {
+      dispatch({
+        type: "loginFailed",
+        payload: "Incorrect Username or Password",
+      });
+      alert("Incorrect Username or Password");
+    }
     console.log("username:", state.username, "password:", state.password);
     dispatch({ type: "RESET" });
   };
@@ -173,7 +171,8 @@ const navigate = useNavigate();
               // onClick={}
               disabled={state.isButtonDisabled}
             >
-              Sign In         </Button>
+              Sign In{" "}
+            </Button>
           </Box>
         </Box>
       </Container>

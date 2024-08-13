@@ -41,13 +41,17 @@ const initialState: ProductList = {
 const Products = () => {
   const [productData, setProductData] = useState<ProductList>(initialState);
 
-  const handleQty = (type:string, id:number) => {
+  const handleQty = (type: string, id: number) => {
     setProductData((prevState) => ({
       ...prevState,
       listData: prevState.listData.map((product) => {
-        if (type === 'increment' && product.id === id) {
-          return { ...product, qty: product.qty + 1 };
-        } else if (type === 'decrement' && product.id === id && product.qty > 0) {
+        if (type === "increment" && product.id === id ) {
+          return { ...product, qty: product.qty ++ };
+        } else if (
+          type === "decrement" &&
+          product.id === id &&
+          product.qty > 0
+        ) {
           return { ...product, qty: product.qty - 1 };
         } else {
           return product;
@@ -56,30 +60,45 @@ const Products = () => {
     }));
   };
 
+  const getProducts = async () => {
+    try {
+      const response = await axios.get<ProductState[]>(
+        "http://localhost:4000/products?_sort=id&_order=desc"
+      );
+      // console.log('response',response.data)
+      setProductData({ ...productData, listData: response.data });
+    } catch (err) {
+      console.log("API Fetch Err:", err);
+      throw err;
+    }
+  };
 
+  useEffect(() => {
+    getProducts();
+  }, []);
+  console.log(">>>product data>>>", productData.listData);
 
-  const getProducts = async()=>{
-   try{ const response =await  axios.get<ProductState[]>('http://localhost:4000/products?_sort=id&_order=desc')
-    // console.log('response',response.data)
-    setProductData({...productData,listData:response.data})
-   }
-   catch(err){
-    console.log("API Fetch Err:",err)
-    throw err;
-   }
-  }
-
-  useEffect(()=>{getProducts()},[])
-  console.log(">>>product data>>>",productData.listData)
-
-
+  const deleteProduct = (id: number) => {
+    fetch("http://localhost:4000/products/" + id, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error();
+        }
+        getProducts();
+      })
+      .catch((error) => {
+        alert("unable to delete the product");
+      });
+  };
 
   return (
     <div className="container my-4">
       <h2 className="text-center mb-4">Products</h2>
       <div className="row mb-3">
         <div className="col">
-          <Link className="btn btn-primary me-1" to="*" role="button">
+          <Link className="btn btn-primary me-1" to="/create" role="button">
             Create Product
           </Link>
           <button
@@ -106,43 +125,76 @@ const Products = () => {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>{productData?.listData?.map((val,index)=>{
-            let type:string;
+        <tbody>
+          {productData?.listData?.map((val, index) => {
+            let type: string;
             return (
-                <tr key={index}>
-                    <th>{val.id}</th>
-                    <th>{val.productName}</th>
-                    <th>{val.category}</th>
-                    <th>{val.price}</th>
-                    <th>{val.qty}</th>
-                    <th><img src={'http://localhost:4000/images/'+val.imageFileName} width='100' alt="..."/></th>
-                    <th>{val.createdAt}</th>
-                    <td style={{width:'10px' ,whiteSpace:'nowrap'}}>
-                        <div>
-                        {val.qty === 0 ? (
+              <tr key={index}>
+                <th>{val.id}</th>
+                <th>{val.productName}</th>
+                <th>{val.category}</th>
+                <th>{val.price}</th>
+                <th>{val.qty}</th>
+                <th>
+                  <img
+                    src={"http://localhost:4000/images/" + val.imageFileName}
+                    width="100"
+                    alt="..."
+                  />
+                </th>
+                <th>{val.createdAt}</th>
+                <td style={{ width: "10px", whiteSpace: "nowrap" }}>
+                  <div>
+                    {val.qty === 0 ? (
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-sm me-1"
+                        onClick={() => handleQty((type = "increment"), val.id)}
+                      >
+                        Add
+                      </button>
+                    ) : (
+                      <div>
+                        <button
+                          className="btn btn-outline-secondary btn-sm ms-1"
+                          onClick={() =>
+                            handleQty((type = "decrement"), val.id)
+                          }
+                        >
+                          -
+                        </button>
+                        <span>{val.qty}</span>
+                        <button
+                          className="btn btn-outline-secondary btn-sm me-1"
+                          onClick={() =>
+                            handleQty((type = "increment"), val.id)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <Link
+                    className="btn btn-primary btn-sm me-1"
+                    to={"/products/edit/" + val.id}
+                    role="button"
+                  >
+                    Edit
+                  </Link>
                   <button
                     type="button"
-                    className="btn btn-primary btn-sm me-1"
-                    onClick={() => handleQty(type='increment',val.id)}
+                    className="btn btn-danger btn -sm"
+                    onClick={() => deleteProduct(val.id)}
                   >
-                    Add
+                    Delete
                   </button>
-                ) : (
-                  <div>
-                    <button  className="btn btn-outline-secondary btn-sm ms-1" onClick={() => handleQty(type='decrement',val.id)}>-</button>
-                    <span>{val.qty}</span>
-                    <button className="btn btn-outline-secondary btn-sm me-1" onClick={() => handleQty(type='increment',val.id)}>+</button>
-                  </div>
-                )}
-                        </div>
-                        <Link className="btn btn-primary btn-sm me-1" to={'*'}>Edit</Link>
-                        <button type="button" className="btn btn-danger btn -sm">Delete</button>
-                    </td>
-                    <th>{val.Action}</th>
-                 
-                </tr>
-            )
-        })}</tbody>
+                </td>
+                <th>{val.Action}</th>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </div>
   );

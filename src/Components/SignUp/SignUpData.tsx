@@ -1,5 +1,7 @@
 import React, { useReducer } from 'react';
 import './signup.css'
+import { Link } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 // Define the shape of a form field
 type FormField ={
@@ -70,6 +72,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 
 const SignUp = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
+  // const Navigate=useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -108,6 +111,7 @@ const SignUp = () => {
     if (validateForm()) {
       console.log('Form submitted:', state.fields);
       dispatch({ type: 'RESET_FORM' });
+      // Navigate('/login')
     }
   };
 
@@ -136,8 +140,8 @@ const SignUp = () => {
         </div>
       ))}
         <div className="login">
-            <p>Already have an account ?</p>
-            <button type="submit" className="btn btn-primary">submit</button>
+            <button type="submit" className="btn btn-primary">Sign Up</button>
+            <p>Already have an account ? <Link to='/login' >Login</Link></p>
             </div>
     </form>
     </div>
