@@ -1,6 +1,7 @@
-import axios from "axios";
+// import axios, { AxiosInstance } from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {AxiosInstance, cancelTokenSource,axios} from "../Services/AxiosInstance";
 
 type ProductState = {
   id: number;
@@ -38,8 +39,15 @@ const initialState: ProductList = {
   errors: {},
 };
 
-const Products = () => {
+const Products:React.FC = () => {
   const [productData, setProductData] = useState<ProductList>(initialState);
+
+  useEffect(() => {
+    getProducts();
+    return () => {
+      cancelTokenSource.cancel('Component unmounted');
+    };
+  }, []);
 
   const handleQty = (type: string, id: number) => {
     setProductData((prevState) => ({
@@ -62,35 +70,44 @@ const Products = () => {
 
   const getProducts = async () => {
     try {
-      const response = await axios.get<ProductState[]>(
-        "http://localhost:4000/products?_sort=id&_order=desc"
+      const response = await AxiosInstance.get<ProductState[]>(
+        "?_sort=id&_order=desc",{
+      cancelToken:cancelTokenSource.token
+
+        }
       );
       // console.log('response',response.data)
       setProductData({ ...productData, listData: response.data });
     } catch (err) {
-      console.log("API Fetch Err:", err);
-      throw err;
-    }
+      if (axios.isCancel(err)) {
+        console.log('Request canceled:', err.message);
+      } else {
+        console.log('fetch failed ')
+      }
   };
+  }
 
-  useEffect(() => {
-    getProducts();
-  }, []);
   console.log(">>>product data>>>", productData.listData);
 
-  const deleteProduct = (id: number) => {
-    fetch("http://localhost:4000/products/" + id, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error();
-        }
-        getProducts();
-      })
-      .catch((error) => {
-        alert("unable to delete the product");
-      });
+  const deleteProduct =async (id: number) => {
+    try{
+       await AxiosInstance.delete<ProductState[]>(`${id}`)
+
+    }catch(err){
+console.log('err>>>',err)
+    }
+    // fetch("http://localhost:4000/products/" + id, {
+    //   method: "DELETE",
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error();
+    //     }
+    //     getProducts();
+    //   })
+    //   .catch((error) => {
+    //     alert("unable to delete the product");
+    //   });
   };
 
   return (
@@ -144,7 +161,7 @@ const Products = () => {
                 </th>
                 <th>{val.createdAt}</th>
                 <td style={{ width: "10px", whiteSpace: "nowrap" }}>
-                  <div>
+                  {/* <div>
                     {val.qty === 0 ? (
                       <button
                         type="button"
@@ -174,7 +191,7 @@ const Products = () => {
                         </button>
                       </div>
                     )}
-                  </div>
+                  </div> */}
                   <Link
                     className="btn btn-primary btn-sm me-1"
                     to={"/products/edit/" + val.id}

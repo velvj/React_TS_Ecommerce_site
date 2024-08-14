@@ -68,7 +68,7 @@ const reducer = (state: StateType, action: Action): StateType => {
   }
 };
 
-const Login = () => {
+const Login:React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const navigate = useNavigate();
