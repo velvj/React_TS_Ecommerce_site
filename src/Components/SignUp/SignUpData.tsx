@@ -1,20 +1,20 @@
 import React, { useReducer } from 'react';
 import './signup.css'
 import { Link, useNavigate } from 'react-router-dom';
-import { setUserData } from '../../Slices/slice';
+import { setUserData } from '../../Slices/userslice';
 import { useDispatch } from 'react-redux';
 import { AxiosInstance } from '../Services/AxiosInstance';
-import { error } from 'console';
+import {FormField} from '../Types';
 
-// Define the shape of a form field
-type FormField ={
-  name: string
-  type: string
-  value: string
-  label: string
-  required: boolean
-  placeholder:string
-}
+// // Define the shape of a form field
+// type FormField ={
+//   name: string
+//   type: string
+//   value: string
+//   label: string
+//   required: boolean
+//   placeholder:string
+// }
 
 // Define the state shape
 type FormState = {

@@ -2,6 +2,8 @@ import React, { useEffect, useReducer } from "react";
 import { Container, TextField, Typography, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AxiosInstance } from "../Services/AxiosInstance";
+import { useSelector } from "react-redux";
+import {RootState} from "../../Stores/store";
 
 type StateType = {
   username: string;
@@ -71,6 +73,8 @@ const reducer = (state: StateType, action: Action): StateType => {
 
 const Login:React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const {users} = useSelector((state:RootState)=>state.usersData)
+  console.log(">>>userData:",users)
 
   const navigate = useNavigate();
 
@@ -193,6 +197,23 @@ const Login:React.FC = () => {
           </Box>
         </Box>
       </Container>
+      <div className="d-flext">
+        {users?.map((ele,index)=>{
+          return (
+            <div key={index}>
+   <ul className="list-inline mx-auto justify-content-center"> 
+        <li className="list-inline-item">{ele.firstName}</li>
+        <li className="list-inline-item">{ele.lastName}</li>
+        <li className="list-inline-item">{ele.email}</li>
+        <li className="list-inline-item">{ele.Password}</li>
+        <li className="list-inline-item">{ele.confirmPassword}</li>
+        <li className="list-inline-item">{ele.phone}</li>
+        </ul>
+            </div>
+          )
+        })}
+     
+      </div>
     </>
   );
 };

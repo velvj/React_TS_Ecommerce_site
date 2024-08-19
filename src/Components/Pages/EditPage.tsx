@@ -21,10 +21,11 @@ const EditProduct:React.FC = () => {
 
     const getProduct =async () => {
         try{
-            const response=await   AxiosInstance.get<ProductState>(`${params.id}`)
+            const response=await   AxiosInstance.get<ProductState>(`/products/${params.id}`)
             setInitialData(response.data)
         }catch(err){
-
+console.log(err)
+throw new Error('Error:'+err)
         }
     
         // fetch('http://localhost:4000/products/' + params.id)
@@ -61,16 +62,17 @@ const EditProduct:React.FC = () => {
         
 
         try {
-            const response = await fetch('http://localhost:4000/products/' + params.id, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(product),
-            });
-            const data = await response.json();
-            console.log("data>>", data);
-            if (response.ok) {
+            // const response = await fetch('http://localhost:4000/products/' + params.id, {
+            //     method: "PUT",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify(product),
+            // });
+            const response = await AxiosInstance.put('/products/'+params.id,product)
+            const Data = await response.data;
+            console.log("data>>", Data);
+            if (Data) {
                 navigate('/products');
             } else if (response.status === 400) {
                 alert('Validation error');
