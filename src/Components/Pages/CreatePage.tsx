@@ -143,7 +143,7 @@ const CreateProductPage:React.FC = () => {
 
     try {
 
-     const response = await AxiosInstance.post<CreateProductFields[]>('',finalData)
+     const response = await AxiosInstance.post<CreateProductFields[]>('/products',finalData)
       // const response = await fetch("http://localhost:4000/products", {
       //   method: "POST",
       //   headers: {

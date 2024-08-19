@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { Container, TextField, Typography, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { AxiosInstance } from "../Services/AxiosInstance";
 
 type StateType = {
   username: string;
@@ -81,7 +82,21 @@ const Login:React.FC = () => {
     }
   }, [state.username, state.password]);
 
-  //
+  //get user details
+   const getUserList=async(email:string,password:string)=>{
+    const response= await AxiosInstance.get('/UsersList')
+    console.log('response data>>>login',response.data)
+   let userDataAuth= response.data.find((ele:any)=>{
+    if(ele.email === email && ele.Password === password){
+      return true
+    }else{
+      console.log("user name doesn't exist")
+      return false
+    }
+   })
+   return userDataAuth;
+ 
+   }
 
   const handleUsernameChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -99,10 +114,12 @@ const Login:React.FC = () => {
       payload: event.target.value,
     });
   };
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async(event: React.FormEvent) => {
     event.preventDefault();
 
-    if (state.username === "vj@gmail.com" && state.password === "welcome@123") {
+    let userAuth=await getUserList(state.username,state.password)
+
+    if (userAuth) {
       dispatch({
         type: "loginSuccess",
         payload: "login Successfully",
