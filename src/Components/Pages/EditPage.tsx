@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import AxiosInstance from "../Services/AxiosInstance";
 
 type ProductState = {
     productName: string;
@@ -10,27 +11,33 @@ type ProductState = {
     createdAt?: number;
 };
 
-const EditProduct = () => {
+const EditProduct:React.FC = () => {
     const params = useParams();
     const navigate = useNavigate();
     const [initialData, setInitialData] = useState<ProductState>();
 
-
     useEffect(()=>{getProduct()}, []);
 
 
-    const getProduct = () => {
-        fetch('http://localhost:4000/products/' + params.id)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error();
-            }).then((data) => {
-                setInitialData(data);
-            }).catch((error) => {
-                alert('Unable to read the product data');
-            });
+    const getProduct =async () => {
+        try{
+            const response=await   AxiosInstance.get<ProductState>(`${params.id}`)
+            setInitialData(response.data)
+        }catch(err){
+
+        }
+    
+        // fetch('http://localhost:4000/products/' + params.id)
+        //     .then(response => {
+        //         if (response.ok) {
+        //             return response.json();
+        //         }
+        //         throw new Error();
+        //     }).then((data) => {
+        //         setInitialData(data);
+        //     }).catch((error) => {
+        //         alert('Unable to read the product data');
+        //     });
     };
 
 

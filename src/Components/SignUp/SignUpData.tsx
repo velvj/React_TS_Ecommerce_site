@@ -70,7 +70,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
   }
 };
 
-const SignUp = () => {
+const SignUp:React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
   // const Navigate=useNavigate();
 

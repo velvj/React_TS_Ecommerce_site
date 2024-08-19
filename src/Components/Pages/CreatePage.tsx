@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AxiosInstance from "../Services/AxiosInstance";
 
 // Define the shape of a form field
 type CreateProductFields = {
@@ -109,7 +110,7 @@ const reducer = (state: ProductState, Action: ProductAction): ProductState => {
   }
 };
 
-const CreateProductPage = () => {
+const CreateProductPage:React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialStateVal);
   const navigate = useNavigate();
 
@@ -141,19 +142,21 @@ const CreateProductPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:4000/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(finalData),
-      });
 
-      const data: ProductState = await response.json();
+     const response = await AxiosInstance.post<CreateProductFields[]>('',finalData)
+      // const response = await fetch("http://localhost:4000/products", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(finalData),
+      // });
 
-      if (response.ok) {
+      // const data: ProductState = await response.json();
+
+      if (response.data) {
         // Product created successfully
-        navigate("/products", { state: { newProduct: data } });
+        navigate("/products", { state: { newProduct: response.data } });
       } else if (response.status === 400) {
         alert("Validation error");
       } else {
