@@ -41,6 +41,10 @@ const initialState: ProductList = {
 const Products = () => {
   const [productData, setProductData] = useState<ProductList>(initialState);
 
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   const handleQty = (type: string, id: number) => {
     setProductData((prevState) => ({
       ...prevState,
@@ -73,9 +77,7 @@ const Products = () => {
     }
   };
 
-  useEffect(() => {
-    getProducts();
-  }, []);
+
   console.log(">>>product data>>>", productData.listData);
 
   const deleteProduct = (id: number) => {

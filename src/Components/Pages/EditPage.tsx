@@ -15,6 +15,10 @@ const EditProduct = () => {
     const navigate = useNavigate();
     const [initialData, setInitialData] = useState<ProductState>();
 
+
+    useEffect(()=>{getProduct()}, []);
+
+
     const getProduct = () => {
         fetch('http://localhost:4000/products/' + params.id)
             .then(response => {
@@ -29,7 +33,6 @@ const EditProduct = () => {
             });
     };
 
-    useEffect(getProduct, []);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
