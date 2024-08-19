@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AxiosInstance from "../Services/AxiosInstance";
+import {AxiosInstance} from "../Services/AxiosInstance";
 
 // Define the shape of a form field
 type CreateProductFields = {
