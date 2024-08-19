@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import AxiosInstance from "../Services/AxiosInstance";
+import {AxiosInstance} from "../Services/AxiosInstance";
 
 type ProductState = {
     productName: string;

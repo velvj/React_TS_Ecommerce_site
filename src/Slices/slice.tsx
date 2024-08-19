@@ -17,7 +17,7 @@ interface IuserState{
 const initialState:IuserState={users:[]}
 
 const CreateSlices =  createSlice({
-    name:'slice1',
+    name:'sliceFIRST',
     initialState:initialState,
     reducers:{
         setUserData:(state,action:PayloadAction<Iusers>)=>{

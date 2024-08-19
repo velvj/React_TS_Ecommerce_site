@@ -13,7 +13,6 @@ function App() {
   return (
     <Provider store={Store}>
     <BrowserRouter> 
-    <div className="App">
       <Routes> 
     <Route path='/' element={<SignUpData/>}/>   
     <Route path='/login' element={ <Login/>}/>   
@@ -22,7 +21,6 @@ function App() {
     <Route path='/products/edit/:id' element={<EditProduct/>}/>
     
      </Routes>
-    </div>
     </BrowserRouter>
     </Provider>
   );

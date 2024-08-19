@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AxiosInstance from "../Services/AxiosInstance";
+import {AxiosInstance} from "../Services/AxiosInstance";
 
 // Define the shape of a form field
 type CreateProductFields = {
@@ -143,7 +143,7 @@ const CreateProductPage:React.FC = () => {
 
     try {
 
-     const response = await AxiosInstance.post<CreateProductFields[]>('',finalData)
+     const response = await AxiosInstance.post<CreateProductFields[]>('/products',finalData)
       // const response = await fetch("http://localhost:4000/products", {
       //   method: "POST",
       //   headers: {

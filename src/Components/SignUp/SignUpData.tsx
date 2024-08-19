@@ -1,7 +1,10 @@
 import React, { useReducer } from 'react';
 import './signup.css'
-import { Link } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { setUserData } from '../../Slices/slice';
+import { useDispatch } from 'react-redux';
+import { AxiosInstance } from '../Services/AxiosInstance';
+import { error } from 'console';
 
 // Define the shape of a form field
 type FormField ={
@@ -72,7 +75,10 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 
 const SignUp:React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
-  // const Navigate=useNavigate();
+
+  const Rdispatch =useDispatch()
+
+  const Navigate=useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -106,10 +112,26 @@ const SignUp:React.FC = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       console.log('Form submitted:', state.fields);
+      const UserDatas = state.fields.reduce((acc:any,currFields:any)=> {
+         acc[currFields.name]=currFields.value 
+        return acc }  ,{})
+      console.log('UserDatas',UserDatas)
+      Rdispatch(setUserData(UserDatas))
+
+      try{
+        const response = await AxiosInstance.post<FormField>('/UsersList',UserDatas);
+        if(response.data){
+          Navigate('/login')
+        }
+      }catch(err){
+        console.error('Error:',err)
+        throw new Error('unable to create the user')
+
+      }
       dispatch({ type: 'RESET_FORM' });
       // Navigate('/login')
     }
