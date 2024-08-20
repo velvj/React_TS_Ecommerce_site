@@ -1,6 +1,8 @@
 import React, { useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {AxiosInstance} from "../Services/AxiosInstance";
+import { useDispatch } from "react-redux";
+import { setProductData } from "../../Slices/productslice";
 
 // Define the shape of a form field
 type CreateProductFields = {
@@ -113,6 +115,7 @@ const reducer = (state: ProductState, Action: ProductAction): ProductState => {
 const CreateProductPage:React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialStateVal);
   const navigate = useNavigate();
+  const productDispatch = useDispatch()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -140,6 +143,14 @@ const CreateProductPage:React.FC = () => {
       imageFileName: imageFile?.name,
       createdAt: Date.now(),
     };
+    console.log('prod final:',finalData)
+
+    // const ProductDataC=finalData.reduce((acc:any,curVal:any)=>{
+    //   acc[curVa]
+    //   return acc;
+    // },{})
+    // productDispatch(setProductData(finalData))
+
 
     try {
 
